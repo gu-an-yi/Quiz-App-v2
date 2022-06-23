@@ -14,12 +14,15 @@ struct ContentView: View {
         QuizQuestion(title: "Who is your instructor", option1: "ZJ", option2: "XZ", option3: "AB", option4: "YJ"),
         QuizQuestion(title: "Where are we having lessons?", option1: "Banana", option2: "Orange", option3: "Pineapple", option4: "Apple")
     ]
+    
     @State var questionIndex = 0
     @State var isAlertShown = false
     @State var isCorrect = true
     @State var score = 0
     @State var isSheetShown = false
     @State private var progress = 0.0
+    
+    @Environment(\.colorScheme) var ColorScheme:ColorScheme
     
     fileprivate func QuizButton(_ label: String, color: Color) -> some View {
         Text(label)
@@ -30,51 +33,89 @@ struct ContentView: View {
     }
     var body: some View {
         VStack {
-            
-            
             ProgressView(value: progress)
-            Button("Progress Bar", action: { progress += 0 })
-                .foregroundColor(.red)
-                .font(.largeTitle)
-            
-            
-            
+                         Button("Progress Bar", action: { progress += 0 })
+                             .foregroundColor(.red)
+                             .font(.largeTitle)
+
             Text(questions[questionIndex].title)
                 .padding(40)
             HStack {
-                Button {
-                    isAlertShown = true
-                    isCorrect = false
-                    progress += 0.333333333333
-                } label: {
-                    QuizButton(questions[questionIndex].option1, color: .red)
+                HStack {
+                    
+                    HStack {
+                        
+                        
+                        
+                        Image(systemName: "triangle")
+                        
+                        Button {
+                            isAlertShown = true
+                            isCorrect = false
+                            progress += 0.333333333333
+                        } label: {
+                            QuizButton(questions[questionIndex].option1, color: .red)
+                            
+                        }
+                        
+                        
+                    }
+                    .background(Color.red)
                 }
-                Button {
-                    isAlertShown = true
-                    isCorrect = false
-                    progress += 0.333333333333
-                } label: {
-                    QuizButton(questions[questionIndex].option2, color: .teal)
+                
+                
+                HStack {
+                    
+                    HStack {
+                        Image(systemName: "diamond")
+                        Button {
+                            isAlertShown = true
+                            isCorrect = false
+                            progress += 0.333333333333
+                        } label: {
+                            QuizButton(questions[questionIndex].option2, color: .teal)
+                        }
+                    }
+                    .background(Color.teal)
                 }
             }
             HStack {
-                Button {
-                    isAlertShown = true
-                    isCorrect = false
-                    progress += 0.333333333333
-                } label: {
-                    QuizButton(questions[questionIndex].option3, color: .green)
+                
+                HStack {
+                    HStack {
+                        
+                        
+                        
+                        Image(systemName: "circle")
+                        Button {
+                            isAlertShown = true
+                            isCorrect = false
+                            progress += 0.333333333333
+                        } label: {
+                            QuizButton(questions[questionIndex].option3, color: .green)
+                        }
+                    }
+                    .background(Color.green)
                 }
-                Button {
-                    isAlertShown = true
-                    isCorrect = true
-                    score += 1
-                    progress += 0.333333333333
-                } label: {
-                    QuizButton(questions[questionIndex].option4, color: .yellow)
+                HStack {
+                    HStack {
+                        HStack {
+                            Image(systemName: "square")
+                            Button {
+                                isAlertShown = true
+                                isCorrect = true
+                                progress += 0.333333333333
+                                score += 1
+                            } label: {
+                                QuizButton(questions[questionIndex].option4, color: .yellow)
+                            }
+                        }
+                        .background(Color.yellow)
+                    }
                 }
             }
         }
+        .background(ColorScheme == .dark ? .black : .white)
         .alert(isCorrect ? "Well done!" : "You're bad",
                isPresented: $isAlertShown) {
             Button("OK") {
@@ -88,11 +129,16 @@ struct ContentView: View {
                .sheet(isPresented: $isSheetShown) {
                    Text("Your score is \(score)/\(questions.count)")
                }
+               .sheet(isPresented: $isSheetShown) {
+                                   Text("Your score is \(score)/\(questions.count)")
+                               }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+        ContentView()
+            .preferredColorScheme(.dark)
     }
 }
