@@ -14,12 +14,12 @@ struct ContentView: View {
         QuizQuestion(title: "Who is your instructor", option1: "ZJ", option2: "XZ", option3: "AB", option4: "YJ"),
         QuizQuestion(title: "Where are we having lessons?", option1: "Banana", option2: "Orange", option3: "Pineapple", option4: "Apple")
     ]
-    
     @State var questionIndex = 0
     @State var isAlertShown = false
     @State var isCorrect = true
     @State var score = 0
     @State var isSheetShown = false
+    @State private var progress = 0.0
     
     fileprivate func QuizButton(_ label: String, color: Color) -> some View {
         Text(label)
@@ -28,21 +28,31 @@ struct ContentView: View {
             .foregroundColor(.white)
             .cornerRadius(10)
     }
-    
     var body: some View {
         VStack {
+            
+            
+            ProgressView(value: progress)
+            Button("Progress Bar", action: { progress += 0 })
+                .foregroundColor(.red)
+                .font(.largeTitle)
+            
+            
+            
             Text(questions[questionIndex].title)
                 .padding(40)
             HStack {
                 Button {
                     isAlertShown = true
                     isCorrect = false
+                    progress += 0.333333333333
                 } label: {
                     QuizButton(questions[questionIndex].option1, color: .red)
                 }
                 Button {
                     isAlertShown = true
                     isCorrect = false
+                    progress += 0.333333333333
                 } label: {
                     QuizButton(questions[questionIndex].option2, color: .teal)
                 }
@@ -51,6 +61,7 @@ struct ContentView: View {
                 Button {
                     isAlertShown = true
                     isCorrect = false
+                    progress += 0.333333333333
                 } label: {
                     QuizButton(questions[questionIndex].option3, color: .green)
                 }
@@ -58,6 +69,7 @@ struct ContentView: View {
                     isAlertShown = true
                     isCorrect = true
                     score += 1
+                    progress += 0.333333333333
                 } label: {
                     QuizButton(questions[questionIndex].option4, color: .yellow)
                 }
@@ -73,9 +85,9 @@ struct ContentView: View {
                 }
             }
         }
-       .sheet(isPresented: $isSheetShown) {
-           Text("Your score is \(score)/\(questions.count)")
-       }
+               .sheet(isPresented: $isSheetShown) {
+                   Text("Your score is \(score)/\(questions.count)")
+               }
     }
 }
 
